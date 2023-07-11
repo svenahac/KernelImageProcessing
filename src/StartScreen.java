@@ -1,3 +1,4 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
@@ -40,6 +41,7 @@ public class StartScreen extends JFrame{
     private  JLabel kernelT;
     private JList kernelList;
     private JButton apply;
+    private JButton save;
     public static JLabel timeL;
     private JLabel beforeT;
     private JLabel beforeI;
@@ -124,6 +126,17 @@ public class StartScreen extends JFrame{
 
         panel.add(beforeT); panel.add(beforeI);
         panel.add(afterT); panel.add(afterI);
+
+        save = new JButton("Save");
+        save.addActionListener(e -> {
+            try {
+                saveAction(e);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        panel.add(save);
+
         this.add(panel);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -132,6 +145,18 @@ public class StartScreen extends JFrame{
     public static void insertImage(String filePath, JLabel label) {
         ImageIcon icon = new ImageIcon(new ImageIcon(filePath).getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH));
         label.setIcon(icon);
+    }
+
+    private void saveAction(ActionEvent e) throws IOException {
+        openFile.addChoosableFileFilter(new FileNameExtensionFilter("Images (.jpg, .jpeg, .png)", "jpg", "jpeg", "png"));
+        int returnVal = openFile.showSaveDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = openFile.getSelectedFile();
+            processedPath = file.getAbsolutePath();
+            ImageIO.write(outputImg, "jpg", new File(processedPath));
+        } else {
+            System.out.println("File access cancelled.");
+        }
     }
 
     private void selectImageAction(ActionEvent evt) {

@@ -16,4 +16,16 @@ public class Utils {
         StartScreen.timeL.setText("Total time: " + timeElapsed + "ms");
 
     }
+    public static void finalizeD(BufferedImage output, long startTime) throws IOException {
+
+        String fileOutputPath = "src/Temp/temp";
+
+
+        ImageIO.write(output, "jpg", new File(fileOutputPath + ".jpg"));
+
+        StartScreen.outputImg = output;
+
+        StartScreen.timeL.setText("Total time: " + (System.currentTimeMillis()-startTime) + "ms");
+
+    }
 }

@@ -28,15 +28,13 @@ public class Client implements Runnable{
             while ((inMessage = in.readLine()) != null) {
                 String[] data = inMessage.split("&");
                 if (inMessage.startsWith("/process")) {
-                    long start = System.currentTimeMillis();
                     float[][] kernelMatrix = Kernels.getKernelMatrix(data[1]);
                     float factor = Float.parseFloat(data[2]);
                     byte[] receivedArray = unpackImageData(data[3]);
                     BufferedImage receivedImage = byteArrayToBufferedImage(receivedArray);
                     BufferedImage processedImage = convolution(receivedImage, kernelMatrix, factor);
-                    long finish = System.currentTimeMillis();
-                    long totalTime = finish - start;
-                    out.println("/finished" + "&"+totalTime+"&"+ Arrays.toString(packImageData(processedImage)));
+
+                    out.println("/finished" + "&" + Arrays.toString(packImageData(processedImage)));
                 } else {
                     System.out.println(inMessage);
                 }
@@ -66,11 +64,6 @@ public class Client implements Runnable{
         return byteArray;
     }
 
-
-
-
-
-    // write byte[] to BufferedImage
     public BufferedImage byteArrayToBufferedImage(byte[] bytes) throws IOException {
         ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
         BufferedImage image = ImageIO.read(bis);
@@ -78,7 +71,6 @@ public class Client implements Runnable{
         return image;
     }
 
-    // write image to file
     public void writeImageToFile(BufferedImage image, String filePath) throws IOException {
         File outputfile = new File(filePath);
         ImageIO.write(image, "jpg", outputfile);
@@ -95,7 +87,7 @@ public class Client implements Runnable{
                 client.close();
             }
         } catch (IOException e) {
-            // ignore
+            e.printStackTrace();
         }
     }
 

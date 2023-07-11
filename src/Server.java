@@ -85,6 +85,10 @@ public class Server implements Runnable{
         private String msg;
         public int id;
 
+        private long start;
+        private long finish;
+        private long totalTime;
+
         private BufferedImage mergedImage;
 
         public ConnectionHandler(Socket client) {
@@ -99,13 +103,15 @@ public class Server implements Runnable{
                 id = connections.indexOf(this);
                 workingProcess.add(true);
                 images = splitImage(filePath, connections.size());
-                long start = System.currentTimeMillis();
-                broadcastSpecific("/process" + "&" + kernelMatrix + "&" + factor);
 
                 while ((msg = in.readLine())!= null) {
+                    if (msg.startsWith("/start")) {
+                        start = System.currentTimeMillis();
+                        broadcastSpecific("/process" + "&" + kernelMatrix + "&" + factor);
+                    }
                     if (msg.startsWith("/finished")) {
                         String[] data = msg.split("&");
-                        BufferedImage receivedImage = byteArrayToBufferedImage(unpackImageData(data[2]));
+                        BufferedImage receivedImage = byteArrayToBufferedImage(unpackImageData(data[1]));
                         workingProcess.set(id, true);
                         images.set(id, receivedImage);
 
@@ -123,11 +129,7 @@ public class Server implements Runnable{
                             } else {
                                 mergedImage = images.get(0);
                             }
-                            //writeImageToFile(mergedImage, "/home/vexane/Documents/Programiranje/ImgProc/out/production/ImgProc/Temp/temp.jpg");
-                            //writeImageToFile(mergedImage,"./src/Temp/temp2.jpg");
-                            long finish = System.currentTimeMillis();
-                            long totalTime = finish - start;
-                            Utils.finalize(mergedImage, Long.parseLong(data[1]));
+                            Utils.finalizeD(mergedImage, start);
                             StartScreen.insertImage("./src/Temp/temp.jpg", StartScreen.afterI);
                             broadcast("Image has been processed");
                         }
@@ -143,7 +145,7 @@ public class Server implements Runnable{
             }
 
         }
-        // check if all processes are finished then merge images
+
         public byte[] packImageData(BufferedImage inputImg) throws IOException {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(inputImg, "jpg", baos);
