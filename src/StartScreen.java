@@ -32,6 +32,8 @@ public class StartScreen extends JFrame{
     private JMenuItem sample1;
     private JMenuItem sample2;
     private JMenuItem sample3;
+    private JMenuItem sample4;
+    private JMenuItem sample5;
     private ButtonGroup modes;
     private JPanel panel;
     private JLabel selectM;
@@ -67,15 +69,19 @@ public class StartScreen extends JFrame{
         img = new JMenuItem("Select Image");
         img.addActionListener(e -> selectImageAction(e));
 
-        sample1 = new JMenuItem("Sample 1");
-        sample2 = new JMenuItem("Sample 2");
-        sample3 = new JMenuItem("Sample 3");
+        sample1 = new JMenuItem("640x427");
+        sample2 = new JMenuItem("1000x750");
+        sample3 = new JMenuItem("2000x1333");
+        sample4 = new JMenuItem("6000x4000");
+        sample5 = new JMenuItem("9504x6336");
 
         sample1.addActionListener(e -> selectSample1(e));
         sample2.addActionListener(e -> selectSample2(e));
         sample3.addActionListener(e -> selectSample3(e));
+        sample4.addActionListener(e -> selectSample4(e));
+        sample5.addActionListener(e -> selectSample5(e));
 
-        submenu.add(sample1); submenu.add(sample2); submenu.add(sample3);
+        submenu.add(sample1); submenu.add(sample2); submenu.add(sample3); submenu.add(sample4); submenu.add(sample5);
         menu.add(img); menu.add(submenu);
         MenuBar.add(menu);
         this.setJMenuBar(MenuBar);
@@ -174,16 +180,26 @@ public class StartScreen extends JFrame{
     }
 
     private void selectSample1(ActionEvent e){
-        originalPath = "src/Samples/sample1.jpg";
+        originalPath = "src/Samples/640x427.jpg";
         insertImage(originalPath, beforeI);
     }
 
     private void selectSample2(ActionEvent e){
-        originalPath = "src/Samples/sample2.jpg";
+        originalPath = "src/Samples/1000x750.jpg";
         insertImage(originalPath, beforeI);
     }
     private void selectSample3(ActionEvent e){
-        originalPath = "src/Samples/sample3.jpg";
+        originalPath = "src/Samples/2000x1333.jpg";
+        insertImage(originalPath, beforeI);
+    }
+
+    private void selectSample4(ActionEvent e){
+        originalPath = "src/Samples/6000x4000.jpg";
+        insertImage(originalPath, beforeI);
+    }
+
+    private void selectSample5(ActionEvent e){
+        originalPath = "src/Samples/9504x6336.jpg";
         insertImage(originalPath, beforeI);
     }
 
@@ -236,6 +252,5 @@ public class StartScreen extends JFrame{
 
         }
 
-        //System.gc();
     }
 }

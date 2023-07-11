@@ -51,8 +51,6 @@ public class Parallel {
 
         Utils.finalize(outputImg, totalTime);
 
-        //outputImg.flush();
-        //System.gc();
     }
 
     private static class ConvolutionTask implements Runnable {

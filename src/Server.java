@@ -19,6 +19,10 @@ public class Server implements Runnable{
     private ServerSocket server;
     private boolean done;
     private ExecutorService pool;
+    private long start;
+    private long finish;
+    private long totalTime;
+
 
     public Server(String filePath, String kernelMatrix, float factor) {
         connections = new ArrayList<>();
@@ -73,7 +77,7 @@ public class Server implements Runnable{
                 ch.shutdown();
             }
         } catch (IOException e) {
-            // ignore
+            e.printStackTrace();
         }
     }
 
@@ -85,9 +89,7 @@ public class Server implements Runnable{
         private String msg;
         public int id;
 
-        private long start;
-        private long finish;
-        private long totalTime;
+
 
         private BufferedImage mergedImage;
 
@@ -123,13 +125,20 @@ public class Server implements Runnable{
                                 break;
                             }
                         }
+
                         if (allTrue) {
                             if (connections.size()  > 1){
                                 mergedImage = mergeImage(images);
                             } else {
                                 mergedImage = images.get(0);
                             }
-                            Utils.finalizeD(mergedImage, start);
+                            finish = System.currentTimeMillis();
+                            totalTime = finish - start;
+
+                            System.out.println("Total time: " + totalTime + " start: " + start + " finish: " + finish);
+
+
+                            Utils.finalize(mergedImage, totalTime);
                             StartScreen.insertImage("./src/Temp/temp.jpg", StartScreen.afterI);
                             broadcast("Image has been processed");
                         }
@@ -215,7 +224,7 @@ public class Server implements Runnable{
                     client.close();
                 }
             } catch (IOException e) {
-                // ignore
+                e.printStackTrace();
             }
         }
     }

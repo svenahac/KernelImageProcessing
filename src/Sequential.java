@@ -63,8 +63,6 @@ public class Sequential {
 
         Utils.finalize(outputImg, totalTime);
 
-        //outputImg.flush();
-        //System.gc();
 
     }
 

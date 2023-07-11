@@ -71,12 +71,6 @@ public class Client implements Runnable{
         return image;
     }
 
-    public void writeImageToFile(BufferedImage image, String filePath) throws IOException {
-        File outputfile = new File(filePath);
-        ImageIO.write(image, "jpg", outputfile);
-    }
-
-
 
     public void shutdown(){
         done = true;
